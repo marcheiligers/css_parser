@@ -18,6 +18,17 @@ class RuleSetExpandingShorthandTests < Minitest::Test
     assert_equal '1px', declarations['border-top-width']
     assert_equal 'solid', declarations['border-bottom-style']
 
+    # Regression: rgba/hsla with no leading zero on the alpha (e.g. `.1`) used
+    # to fail the colour regex, causing border-*-color to be silently dropped
+    # during shorthand expansion.
+    declarations = expand_declarations('border: 1px solid rgba(0,0,0,.1)')
+    assert_equal '1px', declarations['border-top-width']
+    assert_equal 'solid', declarations['border-top-style']
+    assert_equal 'rgba(0,0,0,.1)', declarations['border-top-color']
+    assert_equal 'rgba(0,0,0,.1)', declarations['border-right-color']
+    assert_equal 'rgba(0,0,0,.1)', declarations['border-bottom-color']
+    assert_equal 'rgba(0,0,0,.1)', declarations['border-left-color']
+
     declarations = expand_declarations('border-color: red hsla(255, 0, 0, 5) rgb(2% ,2%,2%)')
     assert_equal 'red', declarations['border-top-color']
     assert_equal 'rgb(2%,2%,2%)', declarations['border-bottom-color']
@@ -197,7 +208,12 @@ class RuleSetExpandingShorthandTests < Minitest::Test
   end
 
   def test_getting_background_colour_from_shorthand
-    ['blue', 'lime', 'rgb(10,10,10)', 'rgb (  -10%, 99, 300)', '#ffa0a0', '#03c', 'trAnsparEnt', 'inherit'].each do |colour|
+    [
+      'blue', 'lime', 'rgb(10,10,10)', 'rgb (  -10%, 99, 300)', '#ffa0a0', '#03c', 'trAnsparEnt', 'inherit',
+      # Regression: alpha without a leading zero (e.g. `.1`) used to fail the
+      # colour regex and silently drop background-color.
+      'rgba(0,0,0,.1)'
+    ].each do |colour|
       shorthand = "background:#{colour} url('chess.png') center repeat fixed ;"
       declarations = expand_declarations(shorthand)
       assert_equal(colour, declarations['background-color'])
