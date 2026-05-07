@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+### Version 2.2.0
 * Accept CSS `<number>` values with an omitted integer part (e.g. `.1`) inside `rgb()`/`rgba()`/`hsl()`/`hsla()`. Previously `RE_COLOUR_NUMERIC` and `RE_COLOUR_NUMERIC_ALPHA` required at least one digit before the decimal point, which caused colours such as `rgba(0,0,0,.1)` to be silently dropped during shorthand expansion (`background-color` from `background:`, `border-*-color` from `border:`).
 
 ### Version 2.1.0
