@@ -40,6 +40,7 @@ class CssParserRegexpTests < Minitest::Test
       'color: #fff', 'color:#f0a09c;', 'color: #04A', 'color: #04a9CE',
       'color: rgb(100, -10%, 300);', 'color: rgb(10,10,10)', 'color:rgb(12.7253%, -12%,0)',
       'color: hsla(-15, -77%, 19%, 5%);',
+      'color: rgba(0,0,0,.1)', 'color: rgba(0, 0, 0, .5)', 'color: hsla(0, 0%, 0%, .05)',
       'color: black', 'color:Red;', 'color: AqUa;', 'color: blue   ', 'color: transparent',
       'color: darkslategray'
     ].each do |colour|
